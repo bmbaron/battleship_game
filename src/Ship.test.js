@@ -1,10 +1,25 @@
 function Ship() {
   const length = 0;
+  const coordinates = [];
   const hitSpots = [];
+
+  function setCoordinates(coords) {
+    coords.forEach((c) => {
+      coordinates.push(c);
+    });
+  }
+
+  function getCoordinates() {
+    return coordinates;
+  }
+
+  function getHitSpots() {
+    return hitSpots;
+  }
 
   function hit(num) {
     if (!hitSpots.includes(num) && num > 0 && num <= this.length) {
-      hitSpots.push(num);
+      this.hitSpots.push(num);
     }
   }
 
@@ -17,7 +32,10 @@ function Ship() {
 
   return {
     length,
+    setCoordinates,
+    getCoordinates,
     hitSpots,
+    getHitSpots,
     hit,
     isSunk,
   };
@@ -41,9 +59,16 @@ test('make a new ship but do not specify length', () => {
   expect(ship.length).toEqual(0);
 });
 
-test('make a new ship of length 5 and mark it as hit at positions 3 and 4', () => {
+test('make a new ship with specified coordinates and get the coordinates', () => {
+  const ship = new Ship();
+  ship.setCoordinates([1, 2, 3]);
+  expect(ship.getCoordinates()).toEqual([1, 2, 3]);
+});
+
+test('make a new ship of length 5 located at coordinates and mark it as hit at positions 3 and 4', () => {
   const ship = new Ship();
   ship.length = 5;
+  ship.setCoordinates([1, 2, 3, 4, 5]);
   ship.hit(3);
   ship.hit(4);
   expect([ship.hitSpots[0], ship.hitSpots[1]]).toEqual([3, 4]);
