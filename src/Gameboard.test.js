@@ -1,36 +1,75 @@
-import Ship from './ship.test';
+import ShipFactory from './Ship.test';
 
-function Gameboard() {
+function GameboardFactory() {
   const board = [];
+  const shipArray = [];
+  const sunkArray = [];
 
+  function isAlreadyHit(pos) {
+    let isHit = false;
+    shipArray.some((ship) => {
+      console.log(ship.getCoordinates());
+      if (ship.getCoordinates().includes(pos)) {
+        const index = ship.getCoordinates().indexOf(pos);
+        if(ship.getHitSpots()[index]) {
+          isHit = true;
+          return true;
+        }
+      }
+    });
+    if(isHit) {
+      return true;
+    }
+    else {
+      return false;
+    }
+  }
+  
   function getBoard() {
     return board;
   }
 
   function buildBoard() {
-    for (let i = 1; i <= 100; i += 1) {
-      board[i - 1] = i;
+    for (let i = 0; i < 100; i += 1) {
+      board[i] = i;
     }
     return board;
   }
 
-  function checkPlace(length, pos) {
-    if (Math.floor(pos % 10) >= 6 || Math.floor(pos % 10) === 0) {
-      return 0;
+  function placeShip(length, pos) {
+    const coordinatesArray = [];
+    const ship = new ShipFactory();
+    for (let i = pos; i < pos + length; i += 1) {
+      board[i] = 'x';
+      coordinatesArray.push(i);
     }
-    return 1;
+    ship.setCoordinates(coordinatesArray);
+    shipArray.push(ship);
+    return ship;
   }
 
-  function placeShip(length, pos) {
-    if (checkPlace(length, pos) !== 0) {
-      const coordinatesArray = [];
-      const ship = new Ship();
-      for (let i = pos; i < pos + length; i += 1) {
-        board[i] = 'x';
-        coordinatesArray.push(i);
+  function checkIfAllSunk() {
+    if (sunkArray.length === shipArray.length) {
+      return true;
+    }
+    return false;
+  }
+
+  function receiveAttack(pos) {
+    if (pos >= 0 && pos <= 99) {
+      if (board[pos] === 'x') {
+        shipArray.forEach((ship) => {
+          if (ship.getCoordinates().includes(pos)) {
+            ship.hit(pos);
+            board[pos] = '!';
+            if (ship.isSunk()) {
+              sunkArray.push(ship.getCoordinates().length);
+            }
+          }
+        });
+        return true;
       }
-      ship.setCoordinates(coordinatesArray);
-      return ship;
+      board[pos] = 'm';
     }
     return false;
   }
@@ -39,59 +78,54 @@ function Gameboard() {
     getBoard,
     buildBoard,
     placeShip,
+    isAlreadyHit,
+    receiveAttack,
+    checkIfAllSunk,
   };
 }
 
-export default Gameboard;
+export default GameboardFactory;
 
 test('check if new board is an object', () => {
-  const board = new Gameboard();
+  const board = new GameboardFactory();
   expect(typeof board).toBe('object');
 });
 
 test('build a board with positions from 1 to 100', () => {
-  const board = new Gameboard();
-  expect(board.buildBoard().length).toBe(100);
-});
-
-test('the last element of the board array has a value of 100', () => {
-  const board = new Gameboard();
-  expect(board.buildBoard()[99]).toBe(100);
-});
-
-test('a ship placed at 1 with a length of 5 will change the board', () => {
-  const board = new Gameboard();
+  const board = new GameboardFactory();
   board.buildBoard();
-  board.placeShip(5, 1);
-  expect(board.getBoard()[1]).toBe('x');
-  expect(board.getBoard()[2]).toBe('x');
-  expect(board.getBoard()[3]).toBe('x');
-  expect(board.getBoard()[4]).toBe('x');
-  expect(board.getBoard()[5]).toBe('x');
-  expect(board.getBoard()[6]).toBe(7);
-  expect(board.getBoard()[92]).toBe(93);
+  expect(board.getBoard().length).toBe(100);
 });
 
-test('a ship placed at 6 and 17 and 28 and 40 will not be placed', () => {
-  const board = new Gameboard();
+test('place a ship on the board with the starting position and length of ship stated', () => {
+  const board = new GameboardFactory();
   board.buildBoard();
-  expect(board.placeShip(5, 6)).toBe(false);
-  expect(board.placeShip(5, 17)).toBe(false);
-  expect(board.placeShip(5, 28)).toBe(false);
-  expect(board.placeShip(5, 40)).toBe(false);
+  const ship = board.placeShip(3, 0);
+  expect(ship.getCoordinates().length).toEqual(3);
+  expect(ship.getCoordinates()).toEqual([0, 1, 2]);
 });
 
-test('building a ships coordinates from placeShips function', () => {
-  const board = new Gameboard();
+test('check if an attack that misses is marked as a miss', () => {
+  const board = new GameboardFactory();
   board.buildBoard();
-  const ship = board.placeShip(2, 2);
-  expect(ship.getCoordinates()).toEqual([2, 3]);
+  board.placeShip(3, 0);
+  expect(board.receiveAttack(27)).toBe(false);
 });
 
-test('place a ship then mark it as hit', () => {
-  const board = new Gameboard();
+test('check if a placed ships can be attacked until sunk', () => {
+  const board = new GameboardFactory();
   board.buildBoard();
-  const ship = board.placeShip(2, 2);
-  ship.hit(2);
-  expect(ship.hitSpots[0]).toBe(2);
+  board.placeShip(3, 0);
+  expect(board.receiveAttack(0)).toBe(true);
+  expect(board.receiveAttack(1)).toBe(true);
+  expect(board.receiveAttack(2)).toBe(true);
+  expect(board.checkIfAllSunk()).toBe(true);
+});
+
+test('isAlreadyHit is working', () => {
+  const board = new GameboardFactory();
+  board.buildBoard();
+  board.placeShip(3, 0);
+  expect(board.receiveAttack(2)).toBe(true);
+  expect(board.isAlreadyHit(2)).toBe(true);
 });

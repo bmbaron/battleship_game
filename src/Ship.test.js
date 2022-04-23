@@ -1,11 +1,13 @@
-function Ship() {
-  const length = 0;
+function ShipFactory() {
+  let length;
   const coordinates = [];
   const hitSpots = [];
 
-  function setCoordinates(coords) {
-    coords.forEach((c) => {
-      coordinates.push(c);
+  function setCoordinates(arr) {
+    length = arr.length;
+    arr.forEach((a) => {
+      coordinates.push(a);
+      hitSpots.push(false);
     });
   }
 
@@ -18,75 +20,62 @@ function Ship() {
   }
 
   function hit(num) {
-    if (!hitSpots.includes(num) && num > 0 && num <= this.length) {
-      this.hitSpots.push(num);
-    }
+    hitSpots[num] = true;
   }
 
   function isSunk() {
-    if (hitSpots.length === this.length) {
-      return 1;
+    if (hitSpots.every((x) => x === true)) {
+      return true;
     }
-    return 0;
+    return false;
   }
 
   return {
     length,
     setCoordinates,
     getCoordinates,
-    hitSpots,
     getHitSpots,
     hit,
     isSunk,
   };
 }
 
-export default Ship;
+export default ShipFactory;
 
 test('check if new ship is an object', () => {
-  const ship = new Ship();
+  const ship = new ShipFactory();
   expect(typeof ship).toBe('object');
 });
 
 test('make a new ship of length 5', () => {
-  const ship = new Ship();
+  const ship = new ShipFactory();
   ship.length = 5;
   expect(ship.length).toEqual(5);
 });
 
-test('make a new ship but do not specify length', () => {
-  const ship = new Ship();
-  expect(ship.length).toEqual(0);
+test('set coordinates of a ship and check that hitspots is also set', () => {
+  const ship = new ShipFactory();
+  ship.setCoordinates([0, 1, 2]);
+  const results = ship.getCoordinates();
+  expect(results).toEqual([0, 1, 2]);
+  expect(ship.getHitSpots()).toEqual([false, false, false]);
 });
 
-test('make a new ship with specified coordinates and get the coordinates', () => {
-  const ship = new Ship();
-  ship.setCoordinates([1, 2, 3]);
-  expect(ship.getCoordinates()).toEqual([1, 2, 3]);
-});
-
-test('make a new ship of length 5 located at coordinates and mark it as hit at positions 3 and 4', () => {
-  const ship = new Ship();
-  ship.length = 5;
-  ship.setCoordinates([1, 2, 3, 4, 5]);
-  ship.hit(3);
-  ship.hit(4);
-  expect([ship.hitSpots[0], ship.hitSpots[1]]).toEqual([3, 4]);
-});
-
-test('making a ship with two hits in the same position will only log 1 hit', () => {
-  const ship = new Ship();
-  ship.length = 5;
-  ship.hit(3);
-  ship.hit(3);
-  expect([ship.hitSpots[0], ship.hitSpots[1]]).toEqual([3, undefined]);
-});
-
-test('a ship of length 3 can be sunk with 3 calls to hit function', () => {
-  const ship = new Ship();
-  ship.length = 3;
+test('make a new ship at coordinates 0, 1, 2 and mark it as hit at positions 1 and 2', () => {
+  const ship = new ShipFactory();
+  ship.setCoordinates([0, 1, 2]);
   ship.hit(1);
   ship.hit(2);
-  ship.hit(3);
-  expect(ship.isSunk()).toEqual(1);
+  expect([ship.getHitSpots()[1], ship.getHitSpots()[2]]).toEqual([true, true]);
+});
+
+test('a ship at coordinates 0, 1, 2 can be sunk with 3 calls to hit function', () => {
+  const ship = new ShipFactory();
+  ship.setCoordinates([0, 1, 2]);
+  expect(ship.getHitSpots()).toEqual([false, false, false]);
+  ship.hit(0);
+  ship.hit(1);
+  ship.hit(2);
+  expect(ship.getHitSpots()).toEqual([true, true, true]);
+  expect(ship.isSunk()).toEqual(true);
 });
