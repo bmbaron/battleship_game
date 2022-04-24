@@ -7,6 +7,6 @@
     "parser": "@babel/eslint-parser",
     "extends": ["airbnb"],
     "rules": {
-        "allowIndentationTabs": true
+        // "allowIndentationTabs": 0
     }
 }

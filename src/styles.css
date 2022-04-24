@@ -1,0 +1,165 @@
+.title-container {
+	color: white;
+	background-color: #0D6EFD;
+	width: 215px;
+	height: 4rem;
+	text-align: center;
+	margin: auto;
+	border-radius: 10px;
+	margin-top: 20px;
+}
+
+.title-container > h1 {
+	line-height: 4rem;
+	text-align: center;
+}
+
+.main-container {
+	margin: 5%;
+	margin-top: 4%;
+	display: flex;
+}
+
+.right-container {
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+	align-items: center;
+}
+
+.left-container {
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+	align-items: center;    
+}
+
+.player-label {
+	text-align: center;
+	margin: auto;
+	width: 35vw;
+	height: 45px;
+	line-height: 40px;
+	border: 2px solid #0D6EFD;
+	color: #0D6EFD;
+	font-size: 2vw;
+	border-radius: 5px;
+}
+
+.player-label:hover {
+	background-color:#99e699;
+	cursor: pointer;
+}
+
+.board-container {
+	margin-top: 20px;
+	display: grid;
+	grid-template-columns: 3.5vw 3.5vw 3.5vw 3.5vw 3.5vw 3.5vw 3.5vw 3.5vw 3.5vw 3.5vw;
+	grid-auto-rows: 3.5vw;
+	text-align: center;
+	align-items: center;
+	justify-items: center;
+}
+
+.disabled {
+	pointer-events: none;
+}
+
+/* .prompt-box {
+	text-align: center;
+	margin: auto;
+	display: block;
+	width: 70%;
+	height: 20%;
+	border: 2px solid #0D6EFD;
+	background-color: lightgrey;
+	font-size: 2rem;
+} */
+
+.btn {
+	height: 3.5vw;
+	width: 3.5vw;
+}
+
+.btn-ship {
+	background-color: rgb(153, 230, 153) !important;
+}
+
+.btn-miss {
+	background-color: rgb(0, 191, 255) !important;
+  pointer-events: none;
+}
+
+.btn-hit {
+	background-color: rgb(251, 86, 86) !important;
+	color: white !important;
+	pointer-events: none;
+}
+
+.btn-sunk {
+	background-color: rgb(135, 135, 135) !important;
+	color: white !important;
+	pointer-events: none;
+}
+
+
+
+.button:hover {
+	/* background-color: lightcoral !important; */
+	cursor: pointer;
+}
+
+.play-again {
+	background-color:#99e699;
+	transform: scale(1.1);
+	transition: ease 1s all;
+}
+
+@media only screen and (max-width: 1000px) {
+	.title-container {
+			height: 3rem;
+			width: 175px;
+			margin-bottom: 1rem;
+	}
+	.title-container > h1 {
+			line-height: 3rem;
+			font-size: 2rem;
+	}
+	.main-container {
+			margin: 0;
+			flex-direction: column;
+			margin-bottom: 2rem;
+	}
+	.container {
+			margin: auto;
+			display: flex;
+			flex-direction: column;
+	}
+	.container > div {
+			display: flex;
+			flex-direction: column;
+			margin-bottom: 0.5rem;
+	}
+	.container > div > .board-container > .btn{
+			font-size: 12px;
+	}
+
+	.btn {
+			height: 8vw;
+			width: 8vw;
+	}
+
+	.board-container {
+			margin-top: 10px;
+			grid-template-columns: 8vw 8vw 8vw 8vw 8vw 8vw 8vw 8vw 8vw 8vw;
+			grid-auto-rows: 8vw;
+	}
+
+	.player-label {
+			margin-top: 1rem;
+			height: 50px;
+			line-height: 50px;
+			width: 55vw;
+			font-size: 3vw;
+	}
+}
