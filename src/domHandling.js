@@ -63,8 +63,7 @@ export function initializeBoard(boardContainer) {
 
 export function renderBoard(boardContainer, board) {
   boardContainer.querySelectorAll('.btn').forEach((square) => {
-    // eslint-disable-next-line no-restricted-globals
-    if (isNaN(board[square.id])) {
+    if (Number.isNaN(Number(board[square.id]))) {
       if (board[square.id] === 'x') {
         square.classList.add('btn-ship');
       }
@@ -73,6 +72,9 @@ export function renderBoard(boardContainer, board) {
       }
       if (board[square.id] === '!') {
         square.classList.add('btn-hit');
+      }
+      if (board[square.id] === 's') {
+        square.classList.add('btn-sunk');
       }
     }
   });
