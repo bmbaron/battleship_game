@@ -16,16 +16,18 @@ function GameboardFactory() {
     return board;
   }
 
-  function placeShip(length, pos) {
-    const coordinatesArray = [];
+  function placeShip(coordinatesArray) {
+    coordinatesArray.forEach((coord) => {
+      board[coord] = 'x';
+    });
     const ship = new ShipFactory();
-    for (let i = pos; i < pos + length; i += 1) {
-      board[i] = 'x';
-      coordinatesArray.push(i);
-    }
     ship.setCoordinates(coordinatesArray);
     shipArray.push(ship);
-    return ship;
+  }
+
+  function getShips() {
+    console.log(shipArray);
+    return shipArray;
   }
 
   function isAlreadyHit(pos) {
@@ -80,6 +82,7 @@ function GameboardFactory() {
     getBoard,
     buildBoard,
     placeShip,
+    getShips,
     isAlreadyHit,
     receiveAttack,
     checkIfAllSunk,

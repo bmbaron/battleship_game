@@ -2,20 +2,49 @@ import PlayerFactory from './Player';
 import { renderBoard, initializeBoard, initializeUI } from './domHandling';
 
 export function placeAllShips(board) {
-  const ships = {
-    first: [5, 0],
-    second: [4, 10],
-    third: [3, 20],
-    fourth: [2, 30],
-    fifth: [2, 40],
-    sixth: [1, 50],
-    seventh: [1, 60],
-  };
   board.buildBoard();
+  const coordinatesArray = [];
+
+  function makeCoordinates(ship) {
+    const length = ship[0];
+    const horizontal = ship[1];
+    const startPosition = Math.floor(Math.random() * 100);
+    const shipCoords = [];
+    if (horizontal) {
+      for (let i = startPosition; i < startPosition + length; i += 1) {
+        shipCoords.push(i);
+      }
+    } else {
+      for (let i = 0; i < length; i += 1) {
+        shipCoords.push(startPosition + (i * 10));
+      }
+    }
+    shipCoords.forEach((potentialCoord) => {
+      coordinatesArray.forEach((chosenCoord) => {
+        if (chosenCoord.includes(potentialCoord)) {
+          console.log(potentialCoord);
+          makeCoordinates(ship);
+        }
+      });
+    });
+    coordinatesArray.push(shipCoords);
+    return shipCoords;
+    // return startPosition;
+  }
+  const ships = {
+    first: [5, Math.random() < 0.5],
+    second: [4, Math.random() < 0.5],
+    third: [3, Math.random() < 0.5],
+    fourth: [2, Math.random() < 0.5],
+    fifth: [2, Math.random() < 0.5],
+    sixth: [1, Math.random() < 0.5],
+    seventh: [1, Math.random() < 0.5],
+  };
   Object.values(ships).forEach((ship) => {
-    board.placeShip(ship[0], ship[1]);
+    board.placeShip(makeCoordinates(ship));
   });
-  return true;
+  console.log(coordinatesArray);
+  // board.placeShip(array);
 }
 
 export function gameLoop() {
