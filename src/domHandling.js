@@ -33,7 +33,7 @@ export function initializeUI() {
   });
 
   const playerLabel2 = document.createElement('div');
-  playerLabel2.classList.add('player-label');
+  playerLabel2.classList.add('player-label', 'disabled');
   playerLabel2.innerText = 'computer\'s board (attack any position)';
   playerLabel2.id = 'computer-label';
 
@@ -55,7 +55,7 @@ export function initializeBoard(boardContainer) {
     const square = document.createElement('button');
     square.classList.add('btn', 'btn-outline-primary', 'rounded-0');
     square.id = i;
-    square.innerText = i;
+    // square.innerText = i;
     boardContainer.appendChild(square);
   }
   return boardContainer;
@@ -64,7 +64,7 @@ export function initializeBoard(boardContainer) {
 export function renderBoard(boardContainer, board) {
   boardContainer.querySelectorAll('.btn').forEach((square) => {
     if (Number.isNaN(Number(board[square.id]))) {
-      if (board[square.id] === 'x') {
+      if (board[square.id] === 'x' && boardContainer.id !== 'board-container2') {
         square.classList.add('btn-ship');
       }
       if (board[square.id] === 'm') {
@@ -80,10 +80,25 @@ export function renderBoard(boardContainer, board) {
   });
 }
 
-export function sunkStatus(name, message) {
-  if (name === 'human') {
-    document.getElementById('computer-label').innerText = `${message} sunk`;
+export function sunkStatus(name, message, numSunk) {
+  const numLeft = 7 - numSunk;
+  if (numSunk === 1) {
+    const pLabel = document.getElementById('player-label');
+    pLabel.classList.add('disabled');
+    pLabel.innerText = '';
+  }
+  if (name === 'player') {
+    document.getElementById('player-label').innerText = `Your ${message} was sunk!`;
   } else if (name === 'computer') {
-    document.getElementById('player-label').innerText = `${message} sunk`;
+    document.getElementById('computer-label').innerText = `${message} sunk! ${numLeft} left`;
+  }
+  if (numLeft === 0) {
+    const winner = (name === 'player') ? 'computer' : 'player';
+    const pLabel = document.getElementById('player-label');
+    pLabel.innerText = 'play again';
+    pLabel.classList.remove('disabled');
+    pLabel.classList.add('play-again');
+    document.getElementById('computer-label').innerText = `${winner} is the winner!`;
+    document.getElementById('board-container2').classList.add('disabled');
   }
 }

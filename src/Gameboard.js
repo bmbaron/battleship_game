@@ -6,6 +6,7 @@ function GameboardFactory(name) {
   const data = {
     name,
   };
+  function getName() { return data.name; }
   const board = [];
   const shipArray = [];
   const sunkArray = [];
@@ -71,7 +72,7 @@ function GameboardFactory(name) {
                 board[coord] = 's';
               });
               sunkArray.push(ship.getCoordinates().length);
-              sunkStatus(data.name, ship.getName(ship.getLength()));
+              sunkStatus(data.name, ship.getName(ship.getLength()), sunkArray.length);
               // console.log(sunkArray);
             }
           }
@@ -84,6 +85,7 @@ function GameboardFactory(name) {
   }
 
   return {
+    getName,
     getBoard,
     buildBoard,
     placeShip,

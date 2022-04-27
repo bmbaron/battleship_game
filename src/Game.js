@@ -3,7 +3,7 @@ import { renderBoard, initializeBoard, initializeUI } from './domHandling';
 import placeShips from './placeShips';
 
 export default function gameLoop() {
-  const player = new PlayerFactory('human');
+  const player = new PlayerFactory('player');
   const computer = new PlayerFactory('computer');
   const playerBoard = player.setPlayerBoard();
   const computerBoard = computer.setPlayerBoard();
@@ -15,7 +15,7 @@ export default function gameLoop() {
   boardContainer2.querySelectorAll('.btn').forEach((button) => {
     button.addEventListener('click', (e) => {
       e.stopPropagation();
-      player.move(computerBoard, parseInt(button.innerText, 10));
+      player.move(computerBoard, parseInt(button.id, 10));
       renderBoard(boardContainer2, computerBoard.getBoard());
       computer.move(playerBoard);
       renderBoard(boardContainer1, playerBoard.getBoard());
