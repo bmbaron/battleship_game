@@ -3,6 +3,33 @@ function ShipFactory() {
   const coordinates = [];
   const hitSpots = [];
 
+  function getLength() {
+    return length;
+  }
+
+  function getName(len) {
+    let shipName;
+    switch (len) {
+      case 5:
+        shipName = 'carrier';
+        break;
+      case 4:
+        shipName = 'battleship';
+        break;
+      case 3:
+        shipName = 'submarine';
+        break;
+      case 2:
+        shipName = 'patrol boat';
+        break;
+      case 1:
+        shipName = 'jet ski';
+        break;
+      default:
+        break;
+    }
+    return shipName;
+  }
   function setCoordinates(arr) {
     length = arr.length;
     arr.forEach((a) => {
@@ -32,7 +59,8 @@ function ShipFactory() {
   }
 
   return {
-    length,
+    getLength,
+    getName,
     setCoordinates,
     getCoordinates,
     getHitSpots,

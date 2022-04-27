@@ -26,8 +26,8 @@ export function initializeUI() {
 
   const playerLabel1 = document.createElement('div');
   playerLabel1.classList.add('player-label');
+  playerLabel1.id = 'player-label';
   playerLabel1.innerText = 'your board (click to shuffle)';
-  playerLabel1.id = 'player1';
   playerLabel1.onclick = (() => {
     window.location.reload();
   });
@@ -35,7 +35,7 @@ export function initializeUI() {
   const playerLabel2 = document.createElement('div');
   playerLabel2.classList.add('player-label');
   playerLabel2.innerText = 'computer\'s board (attack any position)';
-  playerLabel2.id = 'player1';
+  playerLabel2.id = 'computer-label';
 
   leftContainer.appendChild(playerLabel1);
   leftContainer.appendChild(boardContainer1);
@@ -78,4 +78,12 @@ export function renderBoard(boardContainer, board) {
       }
     }
   });
+}
+
+export function sunkStatus(name, message) {
+  if (name === 'human') {
+    document.getElementById('computer-label').innerText = `${message} sunk`;
+  } else if (name === 'computer') {
+    document.getElementById('player-label').innerText = `${message} sunk`;
+  }
 }

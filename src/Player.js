@@ -3,11 +3,10 @@ import GameboardFactory from './Gameboard';
 function PlayerFactory(name) {
   const data = {
     name,
-    shipsSunk: 0,
   };
 
-  function getPlayerBoard() {
-    const playerBoard = new GameboardFactory();
+  function setPlayerBoard() {
+    const playerBoard = new GameboardFactory(name);
     return playerBoard;
   }
 
@@ -27,7 +26,7 @@ function PlayerFactory(name) {
 
   return {
     data,
-    getPlayerBoard,
+    setPlayerBoard,
     move,
   };
 }

@@ -1,7 +1,11 @@
 /* eslint-disable consistent-return */
 import ShipFactory from './Ship';
+import { sunkStatus } from './domHandling';
 
-function GameboardFactory() {
+function GameboardFactory(name) {
+  const data = {
+    name,
+  };
   const board = [];
   const shipArray = [];
   const sunkArray = [];
@@ -26,7 +30,6 @@ function GameboardFactory() {
   }
 
   function getShips() {
-    console.log(shipArray);
     return shipArray;
   }
 
@@ -63,12 +66,14 @@ function GameboardFactory() {
           if (ship.getCoordinates().includes(pos)) {
             ship.hit(pos);
             board[pos] = '!';
-          }
-          if (ship.isSunk()) {
-            ship.getCoordinates().forEach((coord) => {
-              board[coord] = 's';
-            });
-            sunkArray.push(ship.getCoordinates().length);
+            if (ship.isSunk()) {
+              ship.getCoordinates().forEach((coord) => {
+                board[coord] = 's';
+              });
+              sunkArray.push(ship.getCoordinates().length);
+              sunkStatus(data.name, ship.getName(ship.getLength()));
+              // console.log(sunkArray);
+            }
           }
         });
         return true;
