@@ -84,8 +84,10 @@ export async function sunkStatus(name, message, numSunk) {
   const numLeft = 7 - numSunk;
   if (numSunk === 1) {
     const pLabel = document.getElementById('player-label');
-    pLabel.classList.add('disabled');
-    pLabel.innerText = '';
+    if (pLabel.innerText === 'your board (click to shuffle)') {
+      pLabel.classList.add('disabled');
+      pLabel.innerText = '';
+    }
   }
   if (name === 'player') {
     document.getElementById('player-label').innerText = `Your ${message} was sunk!`;

@@ -9,7 +9,7 @@ function eraseTakenCoordinates() {
 function findShipPlace(shipLength) {
   const length = shipLength;
   const horizontal = Math.random() < 0.5;
-  const startPosition = Math.floor(Math.random() * 100);
+  const startPosition = Math.floor(Math.random() * 99);
   const shipCoords = [];
   if (horizontal) {
     let reverseAmount = 1;
@@ -52,6 +52,7 @@ function findShipPlace(shipLength) {
       if (!takenCoordinates.includes(coord + 10)) takenCoordinates.push(coord + 10);
       if (!takenCoordinates.includes(coord - 10)) takenCoordinates.push(coord - 10);
     });
+    console.log(shipCoords);
   }
   return [shipApproved, shipCoords];
 }
@@ -63,11 +64,12 @@ export default function placeShips(boardContainer, board) {
   const shipArray = ['', '', '', '', '', '', ''];
   for (let i = 0; i < shipArray.length; i += 1) {
     shipArray[i] = findShipPlace(shipLengths[i]);
-    if (shipArray[i][0] === true) {
+    if (shipArray[i][0] === true && !shipArray[i][1].some((num) => num < 0)) {
       board.placeShip(shipArray[i][1]);
     } else {
       i -= 1;
     }
   }
+  // board.getShips().forEach((s) => console.log(s.getCoordinates()));
   renderBoard(boardContainer, board.getBoard());
 }
