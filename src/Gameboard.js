@@ -10,6 +10,7 @@ function GameboardFactory(name) {
   const board = [];
   const shipArray = [];
   const sunkArray = [];
+
   function getBoard() {
     return board;
   }
@@ -49,7 +50,6 @@ function GameboardFactory(name) {
     if (isHit) {
       return true;
     }
-
     return false;
   }
 

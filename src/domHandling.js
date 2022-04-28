@@ -80,7 +80,7 @@ export function renderBoard(boardContainer, board) {
   });
 }
 
-export function sunkStatus(name, message, numSunk) {
+export async function sunkStatus(name, message, numSunk) {
   const numLeft = 7 - numSunk;
   if (numSunk === 1) {
     const pLabel = document.getElementById('player-label');
