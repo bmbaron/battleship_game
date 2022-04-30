@@ -1,4 +1,5 @@
 import GameboardFactory from './Gameboard';
+import testFunction from './logic';
 
 function PlayerFactory(name) {
   const data = {
@@ -13,8 +14,8 @@ function PlayerFactory(name) {
   function move(board, position) {
     const enemyBoard = board.getBoard();
     if (data.name === 'computer') {
-      const posToAttack = Math.floor(Math.random() * 100);
-      if (!board.isAlreadyHit(posToAttack) && enemyBoard[posToAttack] !== 'm') {
+      const posToAttack = testFunction(enemyBoard); // Math.floor(Math.random() * 100);
+      if (enemyBoard[posToAttack] !== 'm' && enemyBoard[posToAttack] !== '!' && enemyBoard[posToAttack] !== 's') { // !board.isAlreadyHit(posToAttack) &&
         board.receiveAttack(posToAttack);
       } else {
         move(board);

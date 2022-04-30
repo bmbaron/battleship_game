@@ -104,3 +104,10 @@ export async function sunkStatus(name, message, numSunk) {
     document.getElementById('board-container2').classList.add('disabled');
   }
 }
+
+const age = 20;
+const cake = [];
+const candle = [];
+for (let i = 0; i < age; i += 1) {
+  cake.push(candle[i]);
+}
