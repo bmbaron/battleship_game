@@ -1,5 +1,3 @@
-/* eslint-disable */
-
 import PlayerFactory from './Player';
 import { renderBoard, initializeBoard, initializeUI } from './domHandling';
 import placeShips from './placeShips';
@@ -17,14 +15,10 @@ export default function gameLoop() {
   boardContainer2.querySelectorAll('.btn').forEach((button) => {
     button.addEventListener('click', async (e) => {
       e.stopPropagation();
-      for (let i = 0; i < 99; i += 1) {
-        player.move(computerBoard, i);
-        // player.move(computerBoard, parseInt(button.id, 10));
-        await new Promise(r => setTimeout(r, 100));
-        renderBoard(boardContainer2, computerBoard.getBoard());
-        computer.move(playerBoard);
-        renderBoard(boardContainer1, playerBoard.getBoard());
-      }
+      player.move(computerBoard, parseInt(button.id, 10));
+      renderBoard(boardContainer2, computerBoard.getBoard());
+      computer.move(playerBoard);
+      renderBoard(boardContainer1, playerBoard.getBoard());
     });
   });
 
@@ -33,3 +27,12 @@ export default function gameLoop() {
   computerBoard.buildBoard();
   placeShips(boardContainer2, computerBoard);
 }
+
+/** loop to play an automatic game */
+// for (let i = 0; i < 100; i += 1) {
+//   player.move(computerBoard, i);
+//   await new Promise(r => setTimeout(r, 200));
+//   renderBoard(boardContainer2, computerBoard.getBoard());
+//   computer.move(playerBoard);
+//   renderBoard(boardContainer1, playerBoard.getBoard());
+// }

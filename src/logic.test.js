@@ -1,98 +1,138 @@
 /* eslint-disable */
 
 const board = [
-  0, 0, 0, 0, 0,
-  0, 1, 1, 1, 0,
-  0, 0, 0, 0, 0,
+		0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 
+		10, 11, 12, 13, 'x', 15, 16, 17, 18, 19, 
+		20, 21, 22, 23, 'x', 25, 26, 27, 28, 29, 
+		30, 31, 32, 33, 'x', 35, 36, 37, 38, 39, 
+		40, 41, 'x', 43, 'x', 45, 46, 'x', 'x', 'x', 
+		50, 51, 52, 53, 'x', 55, 56, 57, 58, 59, 
+		60, 61, 62, 'x', 64, 65, 66, 67, 'x', 'x', 
+		70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 
+		80, 81, 82, 83, 'x', 85, 'x', 'x', 'x', 'x', 
+		90, 91, 92, 93, 'x', 95, 96, 97, 98, 99
 ];
 
-const lastMoves = [];
-let lastHit = false;
-let foundShip = false;
-let direction = '';
+let lastHits = [];
+let direction = undefined;
 
-
-function testFunction() {
-	let random = Math.floor(Math.random() * 15);
-  console.log('last move: ' + lastMoves.slice(-1)[0]);
-
-	if (lastHit) {
-		foundShip = true;
-		random = lastMoves.slice(-1)[0] + 1;
-		if (board[6] === 'x' && board[7] === 'x' && board[8] === 'x') {
-			board[6] = 's';
-			board[7] = 's';
-			board[8] = 's';
-			lastHit = false;
-			foundShip = false;
-			console.log('SUNK');
-			random = Math.floor(Math.random() * 15);
-		}
-		if (direction === 'left') {
-			random = lastMoves.slice(-1)[0] - 1;
-		}
-		if (direction === 'right') {
-			random = lastMoves.slice(-1)[0] + 1;
-		}
-		if (direction === 'down') {
-			random = lastMoves.slice(-1)[0] + 5;
-		}
-		if (direction === 'up') {
-			random = lastMoves.slice(-1)[0] - 5;
-		}
+function getDirection(lastMove, moveBeforeLast) {
+	if (lastMove - moveBeforeLast === 1) {
+		return 'right';
 	}
-	if (!lastHit && foundShip) {
-		if (board[lastMoves.slice(-1)[0] + 5] !== 'x' && board[lastMoves.slice(-1)[0] + 5] !== 'm') {
-			random = lastMoves.slice(-1)[0] + 5;
-		}
-		else if (board[lastMoves.slice(-1)[0] - 5] !== 'x' && board[lastMoves.slice(-1)[0] - 5] !== 'm') {
-			random = lastMoves.slice(-1)[0] - 5;
-		}
-		else if (board[lastMoves.slice(-1)[0] - 1] !== 'x' && board[lastMoves.slice(-1)[0] - 1] !== 'm') {
-			random = lastMoves.slice(-1)[0] - 1;
-		}
-		else {
-			lastMoves.pop();
-		}
+	else if (lastMove - moveBeforeLast === -1) {
+		return 'left';
 	}
-
-  if (board[random] === 1) {
-    console.log('hit');
-		lastMoves.push(random);
-		if (lastMoves.slice(-1)[0] - lastMoves.slice(-2)[0] === 1) {
-			direction = 'right'
-			console.log(direction);
-		}
-		else if (lastMoves.slice(-1)[0] - lastMoves.slice(-2)[0] === -1) {
-			direction = 'left'
-			console.log(direction);
-		}
-		else if (lastMoves.slice(-1)[0] - lastMoves.slice(-2)[0] === 5) {
-			direction = 'down'
-			console.log(direction);
-		}
-		else if (lastMoves.slice(-1)[0] - lastMoves.slice(-2)[0] === -5) {
-			direction = 'down'
-			console.log(direction);
-		}
-		board[random] = 'x';
-		lastHit = true;
-  }
-	else if (board[random] !== 'x' && board[random] !== 'm' && board[random] !== 's') {
-		lastHit = false;
-		board[random] = 'm';
+	else if (lastMove - moveBeforeLast === 10) {
+		return 'down';
 	}
-	console.log(board);
-  return true;
+	else if (lastMove - moveBeforeLast === -10) {
+		return 'up';
+	}
+	else {
+		return undefined;
+	}
 }
 
-test('check the board', () => {
-  expect(board).toEqual([
-    0, 0, 0, 0, 0,
-    0, 1, 1, 1, 0,
-    0, 0, 0, 0, 0,
-  ]);
-});
+function reverseDirection(direction) {
+	if (direction === 'right') {
+		return 'left';
+	}
+	else if (direction === 'left') {
+		return 'right';
+	}
+	else if (direction === 'up') {
+		return 'down';
+	}
+	else if (direction === 'down') {
+		return 'up';
+	}
+	else {
+		return undefined;
+	}
+}
+
+function markAsSunk() {
+	for (let i = 0; i < board.length; i += 1) {
+		if(board[i] === '!') {
+			board[i] = 's';
+		}
+	}
+	console.log(board);
+}
+
+function testFunction(board, num) {
+	let move = Math.floor(Math.random() * 99);
+	if (num !== undefined) {
+		move = num; //Math.floor(Math.random() * 99);
+	}
+	let lastHit = lastHits.slice(-1)[0];
+	if (board[lastHit] === 's') {
+		console.log('sunk');
+		lastHit = undefined;
+		lastHits = [];
+		direction = undefined;
+		move = Math.floor(Math.random() * 99);
+	}
+	if (lastHit !== undefined && direction === undefined) {
+			if (lastHit + 1 < 100 && board[lastHit + 1] !== '!' && board[lastHit + 1] !== 'm') {
+				move = lastHit + 1;
+			}
+			else if (lastHit - 1 > 0 && board[lastHit - 1] !== '!' && board[lastHit - 1] !== 'm') {
+				move = lastHit - 1;
+			}
+			else if (lastHit + 10 < 100 && board[lastHit + 10] !== '!' && board[lastHit + 10] !== 'm') {
+				move = lastHit + 10;
+			}
+			else if (lastHit - 10 > 0 && board[lastHit - 10] !== '!' && board[lastHit - 10] !== 'm') {
+				move = lastHit - 10;
+			}
+			console.log('found after hit: ' + move, direction);
+	}
+	else if (lastHit !== undefined && direction !== undefined) {
+		if (direction === 'right' && lastHit + 1 < 100) {
+			move = lastHit + 1;
+		}
+		else if (direction === 'left' && lastHit - 1 > -1) {
+			move = lastHit - 1;
+		}
+		else if (direction === 'down' && lastHit + 10 < 100) {
+			move = lastHit + 10;
+		}
+		else if (direction === 'up' && lastHit - 10 > -1) {
+			move = lastHit - 10;
+		}			
+		console.log(move, direction);
+	}
+	if(lastHit - move !== 1 && lastHit - move !== 10 && move - lastHit !== 1 && move - lastHit !== 10) {
+		lastHit = undefined;
+	}
+
+	if (board[move] === 'x') {
+		board[move] = '!';
+		lastHits.push(move);
+		if (lastHit === undefined && direction === undefined) {
+			console.log('first hit: ' + move, direction);
+		}
+		else if (lastHit !== undefined && direction === undefined) {
+			direction = getDirection(move, lastHit);
+			console.log('third hit: ' + move, direction);
+		}
+	} 
+	else {
+		if (direction !== undefined) {
+			direction = reverseDirection();
+			while (lastHits.length > 1) {
+				lastHits.pop();
+			}
+		}
+		console.log('miss');
+		board[move] = 'm';
+		console.log(move);
+	}
+	// markAsSunk();
+	return move;
+}
 
 // test('check that the function can get the board', () => {
 //   expect(testFunction()).toEqual([
@@ -114,16 +154,29 @@ test('check the board', () => {
 //   ]);
 // });
 
-test('check that the function can remeber a hit', () => {
-  testFunction();
-  testFunction();
-	testFunction();
-  testFunction();
-	testFunction();
-  testFunction();
-	testFunction();
-	testFunction();
-	testFunction();
-	testFunction();
-  expect(testFunction()).toEqual(true);
+// test('the function can return a move', () => {
+// 	expect(testFunction()).toEqual(13);
+// });
+
+test('the function can register a miss', () => {
+	// testFunction(board, 0);
+});
+
+test('the function can register a hit', () => {
+	lastHits = [];
+	// testFunction(board, 24);
+});
+
+test('the function can register a hit and then find a spot next to it', () => {
+	lastHits = [];
+	testFunction(board, );
+	testFunction(board, );
+	testFunction(board, );
+	testFunction(board, );
+	testFunction(board, );
+	testFunction(board, );
+	testFunction(board, );
+	testFunction(board, );
+	testFunction(board, );
+	// console.log(board);
 });

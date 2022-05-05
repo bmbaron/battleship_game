@@ -52,7 +52,6 @@ function findShipPlace(shipLength) {
       if (!takenCoordinates.includes(coord + 10)) takenCoordinates.push(coord + 10);
       if (!takenCoordinates.includes(coord - 10)) takenCoordinates.push(coord - 10);
     });
-    console.log(shipCoords);
   }
   return [shipApproved, shipCoords];
 }

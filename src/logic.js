@@ -1,118 +1,85 @@
-/* eslint-disable */
+/* eslint-disable no-undef-init */
+let lastHits = [];
+let direction = undefined;
 
-let lastMoves = [];
-let lastHit = false;
-let foundShip = false;
-let direction = '';
+function getDirection(lastMove, moveBeforeLast) {
+  if (lastMove - moveBeforeLast === 1) {
+    return 'right';
+  }
+  if (lastMove - moveBeforeLast === -1) {
+    return 'left';
+  }
+  if (lastMove - moveBeforeLast === 10) {
+    return 'down';
+  }
+  if (lastMove - moveBeforeLast === -10) {
+    return 'up';
+  }
 
+  return undefined;
+}
+
+function reverseDirection(dir) {
+  if (dir === 'right') {
+    return 'left';
+  }
+  if (dir === 'left') {
+    return 'right';
+  }
+  if (dir === 'up') {
+    return 'down';
+  }
+  if (dir === 'down') {
+    return 'up';
+  }
+
+  return undefined;
+}
 
 export default function testFunction(board) {
-	let move = Math.floor(Math.random() * 99);
-	let lastMove = lastMoves.slice(-1)[0];
-
-	if (board[lastMove] === 's') {
-		lastHit = false;
-		foundShip = false;
-		lastMoves = [];
-		direction = '';
-		console.log('SUNK');
-		move = Math.floor(Math.random() * 99);
-	}
-
-	else if (lastHit && direction === '') {
-		foundShip = true;
-		if (lastMove + 1 < 100 && typeof board[lastMove + 1] === 'number') {
-			move = lastMove + 1;
-		}
-		else if (lastMove - 1 > -1 && typeof board[lastMove - 1] === 'number') {
-			move = lastMove - 1;
-		}
-		else if (lastMove + 10 < 100 && typeof board[lastMove + 10] === 'number') {
-			move = lastMove + 10;
-		}
-		else if (lastMove - 10 > -1 && typeof board[lastMove - 10] === 'number') {
-			move = lastMove - 10;
-		}
-	}
-	if (lastHit && direction !== '') {
-		if (direction === 'right' && lastMove + 1 < 100 && typeof board[lastMove + 1] === 'number') {
-			move = lastMove + 1;
-		}
-		if (direction === 'left' && lastMove - 1 > -1 && typeof board[lastMove - 1] === 'number') {
-			move = lastMove - 1;
-		}
-		if (direction === 'down' && lastMove + 10 < 100 && typeof board[lastMove + 10] === 'number') {
-			move = lastMove + 10;
-		}
-		if (direction === 'up' && lastMove - 10 > -1 && typeof board[lastMove - 10] === 'number') {
-			move = lastMove -10;
-		}			
-	}
-	if (!lastHit && foundShip) {
-		if (lastMove + 1 < 100 && typeof board[lastMove + 1] === 'number') {
-			move = lastMove + 1;
-		}
-		else if (lastMove - 1 > -1 && typeof board[lastMove - 1] === 'number') {
-			move = lastMove - 1;
-		}
-		else if (lastMove + 10 < 100 && typeof board[lastMove + 10] === 'number') {
-			move = lastMove + 10;
-		}
-		else if (lastMove - 10 > -1 && typeof board[lastMove - 10] === 'number') {
-			move = lastMove - 10;
-		}
-		if (direction === 'right' && lastMove + 1 < 100 && typeof board[lastMove + 1] === 'number') {
-			move = lastMove + 1;
-			return move;
-		}
-		if (direction === 'left' && lastMove - 1 > -1 && typeof board[lastMove - 1] === 'number') {
-			move = lastMove - 1;
-			return move;
-		}
-		if (direction === 'down' && lastMove + 10 < 100 && typeof board[lastMove + 10] === 'number') {
-			move = lastMove + 10;
-			return move;
-		}
-		if (direction === 'up' && lastMove - 10 > -1 && typeof board[lastMove - 10] === 'number') {
-			move = lastMove -10;
-			return move;
-		}	
-		else {
-			lastMoves.pop();
-			if (direction === 'right') {
-				direction = 'left';
-			}
-			else if (direction === 'left') {
-				direction = 'right';
-			}
-			else if (direction === 'up') {
-				direction = 'down';
-			}
-			else if (direction === 'down') {
-				direction = 'up';
-			}
-		}
-	}
+  let move = Math.floor(Math.random() * 99);
+  let lastHit = lastHits.slice(-1)[0];
+  if (board[lastHit] === 's') {
+    lastHit = undefined;
+    lastHits = [];
+    direction = undefined;
+  }
+  if (lastHit !== undefined && direction === undefined) {
+    if (lastHit + 1 < 100 && board[lastHit + 1] !== '!' && board[lastHit + 1] !== 'm') {
+      move = lastHit + 1;
+    } else if (lastHit - 1 > -1 && board[lastHit - 1] !== '!' && board[lastHit - 1] !== 'm') {
+      move = lastHit - 1;
+    } else if (lastHit + 10 < 100 && board[lastHit + 10] !== '!' && board[lastHit + 10] !== 'm') {
+      move = lastHit + 10;
+    } else if (lastHit - 10 > -1 && board[lastHit - 10] !== '!' && board[lastHit - 10] !== 'm') {
+      move = lastHit - 10;
+    }
+  } else if (lastHit !== undefined && direction !== undefined) {
+    if (direction === 'right' && lastHit + 1 < 100) {
+      move = lastHit + 1;
+    } else if (direction === 'left' && lastHit - 1 > -1) {
+      move = lastHit - 1;
+    } else if (direction === 'down' && lastHit + 10 < 100) {
+      move = lastHit + 10;
+    } else if (direction === 'up' && lastHit - 10 > -1) {
+      move = lastHit - 10;
+    }
+  }
+  // eslint-disable-next-line max-len
+  if (lastHit - move !== 1 && lastHit - move !== 10 && move - lastHit !== 1 && move - lastHit !== 10) {
+    lastHit = undefined;
+  }
 
   if (board[move] === 'x') {
-		lastMoves.push(move);
-		if (lastMove - lastMoves.slice(-2)[0] === 1) {
-			direction = 'right';
-		}
-		else if (lastMove - lastMoves.slice(-2)[0] === -1) {
-			direction = 'left';
-		}
-		else if (lastMove - lastMoves.slice(-2)[0] === 10) {
-			direction = 'down';
-		}
-		else if (lastMove - lastMoves.slice(-2)[0] === -10) {
-			direction = 'up';
-		}
-		lastHit = true;
+    lastHits.push(move);
+    if (lastHit !== undefined && direction === undefined) {
+      direction = getDirection(move, lastHit);
+    }
+  } else if (direction !== undefined) {
+    direction = reverseDirection();
+    while (lastHits.length > 1) {
+      lastHits.pop();
+    }
   }
-	else if (typeof board[move] === 'number') {
-		lastHit = false;
-	}
-	console.log('  move: ' + move + ' lastMove: ' + lastMove + ' direction: ' + direction)
   return move;
 }

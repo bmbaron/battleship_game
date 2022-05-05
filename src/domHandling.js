@@ -34,7 +34,7 @@ export function initializeUI() {
 
   const playerLabel2 = document.createElement('div');
   playerLabel2.classList.add('player-label', 'disabled');
-  playerLabel2.innerText = 'computer\'s board (attack any position)';
+  playerLabel2.innerText = 'attack the computer\'s board';
   playerLabel2.id = 'computer-label';
 
   leftContainer.appendChild(playerLabel1);
@@ -55,7 +55,7 @@ export function initializeBoard(boardContainer) {
     const square = document.createElement('button');
     square.classList.add('btn', 'btn-outline-primary', 'rounded-0');
     square.id = i;
-    // square.innerText = i;
+    square.innerText = i;
     boardContainer.appendChild(square);
   }
   return boardContainer;
