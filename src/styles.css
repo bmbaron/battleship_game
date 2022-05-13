@@ -1,3 +1,31 @@
+
+.bg-image-container {
+	display: flex;
+	justify-content: center;
+}
+.bg-image {
+	position: fixed;
+	margin: auto;
+	margin-top: 5vw;
+	margin-left: 0.5vw;
+	background-size: cover;
+	background-repeat: no-repeat;
+	background-position: center;
+	width: 100vw;
+	height: auto;
+	z-index: -999;
+	opacity: 0.1;
+}
+
+@media only screen and (max-width: 1000px) {
+	.bg-image {
+		opacity: 0.15;
+		background-repeat: repeat-y;
+		width: 80vw;
+		bottom: 8rem;
+	}
+}
+
 .title-container {
 	color: white;
 	background-color: #0D6EFD;
@@ -18,6 +46,7 @@
 	margin: 5%;
 	margin-top: 4%;
 	display: flex;
+	z-index: 1;
 }
 
 .right-container {
@@ -59,22 +88,31 @@
 	text-align: center;
 	align-items: center;
 	justify-items: center;
+	border: 0.5em #0C6EFD solid !important;
+	border-radius: 1em;
+}
+
+.board-container:hover {
+	animation: shake 0.5s;
+}
+
+@keyframes shake {
+  0% { transform: translate(1px, 1px) rotate(0deg); }
+  10% { transform: translate(-1px, -2px) rotate(-1deg); }
+  20% { transform: translate(-3px, 0px) rotate(1deg); }
+  30% { transform: translate(3px, 2px) rotate(0deg); }
+  40% { transform: translate(1px, -1px) rotate(1deg); }
+  50% { transform: translate(-1px, 2px) rotate(-1deg); }
+  60% { transform: translate(-3px, 1px) rotate(0deg); }
+  70% { transform: translate(3px, 1px) rotate(-1deg); }
+  80% { transform: translate(-1px, -1px) rotate(1deg); }
+  90% { transform: translate(1px, 2px) rotate(0deg); }
+  100% { transform: translate(1px, -2px) rotate(-1deg); }
 }
 
 .disabled {
 	pointer-events: none;
 }
-
-/* .prompt-box {
-	text-align: center;
-	margin: auto;
-	display: block;
-	width: 70%;
-	height: 20%;
-	border: 2px solid #0D6EFD;
-	background-color: lightgrey;
-	font-size: 2rem;
-} */
 
 .btn {
 	height: 3.5vw;

@@ -1,6 +1,13 @@
+import shipPic from './assets/battleship.png';
+
+const shipPicture = document.createElement('img');
+shipPicture.src = shipPic;
+shipPicture.alt = 'small picture of a blue battleship';
+const backgroundImage = document.querySelector('.bg-image');
+backgroundImage.style.content = `url(${shipPic})`;
+
 export function initializeUI() {
   const mainContainer = document.querySelector('.main-container');
-
   const container1 = document.createElement('div');
   container1.classList.add('container');
   container1.id = 'container1';

@@ -73,7 +73,6 @@ function GameboardFactory(name) {
               });
               sunkArray.push(ship.getCoordinates().length);
               sunkStatus(data.name, ship.getName(ship.getLength()), sunkArray.length);
-              // console.log(sunkArray);
             }
           }
         });
